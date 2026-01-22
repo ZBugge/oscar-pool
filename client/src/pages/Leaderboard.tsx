@@ -18,6 +18,14 @@ function Leaderboard() {
     id: number
     name: string
   } | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  const copyInviteLink = async () => {
+    const url = `${window.location.origin}/join/${lobbyId}`
+    await navigator.clipboard.writeText(url)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   const loadLeaderboard = useCallback(async () => {
     if (!lobbyId) return
@@ -74,10 +82,19 @@ function Leaderboard() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h1 style={{ marginBottom: '0.5rem' }}>{lobbyName}</h1>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
             <span className={`badge badge-${lobbyStatus}`}>
               {lobbyStatus === 'open' ? 'Accepting Predictions' : lobbyStatus === 'locked' ? 'Locked' : 'Completed'}
             </span>
+            {lobbyStatus === 'open' && (
+              <button
+                onClick={copyInviteLink}
+                className="btn btn-primary"
+                style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}
+              >
+                {copied ? '✓ Link Copied!' : 'Invite Friends'}
+              </button>
+            )}
             {lastUpdated && (
               <span className="text-muted" style={{ fontSize: '0.875rem' }}>
                 Last updated: {formatTime(lastUpdated)}
