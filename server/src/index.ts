@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { initializeDatabase } from './db/schema.js';
 import authRoutes from './routes/auth.js';
 import categoryRoutes from './routes/category.js';
+import lobbyRoutes from './routes/lobby.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,6 +71,7 @@ app.use(
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/category', categoryRoutes);
+app.use('/api/lobby', lobbyRoutes);
 
 // Health check endpoint
 app.get('/api/health', (_req, res) => {

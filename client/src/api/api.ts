@@ -219,8 +219,119 @@ export const api = {
     },
   },
 
-  // Lobby methods will be added in Phase 4
-  lobby: {},
+  lobby: {
+    create: async (name: string): Promise<Lobby> => {
+      const res = await fetch(`${API_URL}/lobby/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to create lobby');
+      }
+      return res.json();
+    },
+
+    getMyLobbies: async (): Promise<Lobby[]> => {
+      const res = await fetch(`${API_URL}/lobby/my-lobbies`, {
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('Failed to get lobbies');
+      return res.json();
+    },
+
+    getById: async (id: string): Promise<Lobby> => {
+      const res = await fetch(`${API_URL}/lobby/${id}`);
+      if (!res.ok) throw new Error('Lobby not found');
+      return res.json();
+    },
+
+    getCategories: async (lobbyId: string): Promise<CategoryWithNominees[]> => {
+      const res = await fetch(`${API_URL}/lobby/${lobbyId}/categories`);
+      if (!res.ok) throw new Error('Failed to get categories');
+      return res.json();
+    },
+
+    getParticipants: async (lobbyId: string): Promise<Participant[]> => {
+      const res = await fetch(`${API_URL}/lobby/${lobbyId}/participants`);
+      if (!res.ok) throw new Error('Failed to get participants');
+      return res.json();
+    },
+
+    lock: async (lobbyId: string): Promise<Lobby> => {
+      const res = await fetch(`${API_URL}/lobby/${lobbyId}/lock`, {
+        method: 'PATCH',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to lock lobby');
+      }
+      return res.json();
+    },
+
+    unlock: async (lobbyId: string): Promise<Lobby> => {
+      const res = await fetch(`${API_URL}/lobby/${lobbyId}/unlock`, {
+        method: 'PATCH',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to unlock lobby');
+      }
+      return res.json();
+    },
+
+    complete: async (lobbyId: string): Promise<Lobby> => {
+      const res = await fetch(`${API_URL}/lobby/${lobbyId}/complete`, {
+        method: 'PATCH',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to complete lobby');
+      }
+      return res.json();
+    },
+
+    deleteParticipant: async (lobbyId: string, participantId: number): Promise<void> => {
+      const res = await fetch(`${API_URL}/lobby/${lobbyId}/participants/${participantId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to delete participant');
+      }
+    },
+
+    bulkDeleteParticipants: async (lobbyId: string, participantIds: number[]): Promise<{ deletedCount: number }> => {
+      const res = await fetch(`${API_URL}/lobby/${lobbyId}/participants/bulk-delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ participantIds }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to delete participants');
+      }
+      return res.json();
+    },
+
+    delete: async (lobbyId: string): Promise<void> => {
+      const res = await fetch(`${API_URL}/lobby/${lobbyId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to delete lobby');
+      }
+    },
+  },
 
   // Participant methods will be added in Phase 5
   participant: {},
