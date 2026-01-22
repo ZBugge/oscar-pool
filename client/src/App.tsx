@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import AdminDashboard from './pages/AdminDashboard'
 import CategoryManagement from './pages/CategoryManagement'
 import CreateLobby from './pages/CreateLobby'
+import JoinLobby from './pages/JoinLobby'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/categories" element={<CategoryManagement />} />
         <Route path="/admin/create-lobby" element={<CreateLobby />} />
+        <Route path="/join/:lobbyId" element={<JoinLobby />} />
       </Routes>
     </Router>
   )

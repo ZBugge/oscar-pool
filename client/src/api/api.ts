@@ -333,8 +333,33 @@ export const api = {
     },
   },
 
-  // Participant methods will be added in Phase 5
-  participant: {},
+  participant: {
+    submit: async (
+      lobbyId: string,
+      participantName: string,
+      predictions: { categoryId: number; nomineeId: number }[]
+    ): Promise<Participant> => {
+      const res = await fetch(`${API_URL}/participant/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lobbyId, participantName, predictions }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to submit predictions');
+      }
+      return res.json();
+    },
+
+    getPicks: async (participantId: number, lobbyId: string): Promise<ParticipantPick[]> => {
+      const res = await fetch(`${API_URL}/participant/${participantId}/picks?lobbyId=${lobbyId}`);
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to get picks');
+      }
+      return res.json();
+    },
+  },
 
   // Leaderboard methods will be added in Phase 6
   leaderboard: {},
