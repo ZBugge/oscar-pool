@@ -12,12 +12,12 @@ Create a new "Oscar Pool" application for predicting Oscar winners, based on the
 |-------|--------|--------|-------|
 | 1. Project Setup | ✅ | 623d903 | Complete |
 | 2. Database & Auth | ✅ | f99bfa3 | Complete |
-| 3. Category Management | 🔄 | - | In progress |
-| 4. Lobby System | ⬜ | - | |
-| 5. Predictions | ⬜ | - | |
-| 6. Leaderboard | ⬜ | - | |
-| 7. Polish | ⬜ | - | |
-| 8. Deploy | ⬜ | - | |
+| 3. Category Management | ✅ | 0c83c93 | Complete |
+| 4. Lobby System | ✅ | f26f342 | Complete |
+| 5. Predictions | ✅ | 0d0df6e | Complete |
+| 6. Leaderboard | ✅ | 21e09fe | Complete |
+| 7. Polish | ✅ | eac76c2 | Complete |
+| 8. Deploy | ✅ | - | Ready for Railway |
 
 **Legend:** ⬜ Pending | 🔄 In Progress | ✅ Complete
 
