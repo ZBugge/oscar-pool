@@ -12,6 +12,8 @@ import {
   getNomineeById,
   setWinner,
   clearWinner,
+  bulkImportCategories,
+  type BulkImportItem,
 } from '../services/category.js';
 
 const router = express.Router();
@@ -179,6 +181,44 @@ router.delete('/:categoryId/winner', requireAuth, async (req, res) => {
   } catch (error) {
     console.error('Clear winner error:', error);
     res.status(500).json({ error: 'Failed to clear winner' });
+  }
+});
+
+// Bulk import categories and nominees from JSON
+router.post('/bulk-import', requireAuth, async (req, res) => {
+  try {
+    const { categories } = req.body;
+
+    if (!Array.isArray(categories)) {
+      return res.status(400).json({ error: 'categories must be an array' });
+    }
+
+    // Validate format
+    for (let i = 0; i < categories.length; i++) {
+      const item = categories[i];
+      if (!item.name || typeof item.name !== 'string' || !item.name.trim()) {
+        return res.status(400).json({ error: `Item ${i}: name is required and must be a string` });
+      }
+      if (!Array.isArray(item.nominees)) {
+        return res.status(400).json({ error: `Item ${i}: nominees must be an array` });
+      }
+      for (let j = 0; j < item.nominees.length; j++) {
+        if (typeof item.nominees[j] !== 'string' || !item.nominees[j].trim()) {
+          return res.status(400).json({ error: `Item ${i}, nominee ${j}: must be a non-empty string` });
+        }
+      }
+    }
+
+    const items: BulkImportItem[] = categories.map(c => ({
+      name: c.name.trim(),
+      nominees: c.nominees.map((n: string) => n.trim()),
+    }));
+
+    const result = await bulkImportCategories(items);
+    res.json(result);
+  } catch (error) {
+    console.error('Bulk import error:', error);
+    res.status(500).json({ error: 'Failed to import categories' });
   }
 });
 

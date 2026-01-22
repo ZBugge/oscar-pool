@@ -20,6 +20,11 @@ function CategoryManagement() {
   const [addingNomineeToCategoryId, setAddingNomineeToCategoryId] = useState<number | null>(null)
   const [newNomineeName, setNewNomineeName] = useState('')
 
+  // Bulk import
+  const [showBulkImport, setShowBulkImport] = useState(false)
+  const [bulkImportJson, setBulkImportJson] = useState('')
+  const [bulkImporting, setBulkImporting] = useState(false)
+
   useEffect(() => {
     const checkAuthAndLoad = async () => {
       try {
@@ -150,6 +155,33 @@ function CategoryManagement() {
     }
   }
 
+  const handleBulkImport = async () => {
+    setError('')
+    setBulkImporting(true)
+
+    try {
+      const parsed = JSON.parse(bulkImportJson)
+
+      if (!Array.isArray(parsed)) {
+        throw new Error('JSON must be an array of categories')
+      }
+
+      const result = await api.category.bulkImport(parsed)
+      alert(`Successfully imported ${result.categoriesCreated} categories with ${result.nomineesCreated} nominees!`)
+      setBulkImportJson('')
+      setShowBulkImport(false)
+      await loadCategories()
+    } catch (err: any) {
+      if (err instanceof SyntaxError) {
+        setError('Invalid JSON format. Please check your syntax.')
+      } else {
+        setError(err.message)
+      }
+    } finally {
+      setBulkImporting(false)
+    }
+  }
+
   if (loading) {
     return <div className="container loading">Loading...</div>
   }
@@ -178,7 +210,77 @@ function CategoryManagement() {
             {addingCategory ? 'Adding...' : 'Add Category'}
           </button>
         </form>
+        <div style={{ marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+          <button
+            className="btn btn-secondary"
+            onClick={() => setShowBulkImport(!showBulkImport)}
+          >
+            {showBulkImport ? 'Hide Bulk Import' : 'Bulk Import from JSON'}
+          </button>
+        </div>
       </div>
+
+      {/* Bulk Import Section */}
+      {showBulkImport && (
+        <div className="card mb-3">
+          <h2>Bulk Import Categories</h2>
+          <p className="text-muted" style={{ marginBottom: '1rem' }}>
+            Paste JSON in the format below to import multiple categories and nominees at once:
+          </p>
+          <pre style={{
+            background: 'var(--bg-light)',
+            padding: '1rem',
+            borderRadius: '8px',
+            fontSize: '0.75rem',
+            overflow: 'auto',
+            marginBottom: '1rem'
+          }}>
+{`[
+  {
+    "name": "Best Picture",
+    "nominees": ["Film A", "Film B", "Film C"]
+  },
+  {
+    "name": "Best Director",
+    "nominees": ["Director A", "Director B"]
+  }
+]`}
+          </pre>
+          <textarea
+            value={bulkImportJson}
+            onChange={(e) => setBulkImportJson(e.target.value)}
+            placeholder="Paste your JSON here..."
+            style={{
+              width: '100%',
+              minHeight: '200px',
+              padding: '0.75rem',
+              borderRadius: '8px',
+              border: '1px solid var(--border)',
+              fontFamily: 'monospace',
+              fontSize: '0.875rem',
+              marginBottom: '1rem'
+            }}
+          />
+          <div className="flex gap-2">
+            <button
+              className="btn btn-primary"
+              onClick={handleBulkImport}
+              disabled={bulkImporting || !bulkImportJson.trim()}
+            >
+              {bulkImporting ? 'Importing...' : 'Import Categories'}
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => {
+                setBulkImportJson('')
+                setShowBulkImport(false)
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Categories List */}
       {categories.length === 0 ? (

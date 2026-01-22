@@ -138,3 +138,28 @@ export async function getCategoriesWithNominees(): Promise<CategoryWithNominees[
 
   return result;
 }
+
+// Bulk import categories and nominees
+export interface BulkImportItem {
+  name: string;
+  nominees: string[];
+}
+
+export async function bulkImportCategories(items: BulkImportItem[]): Promise<{ categoriesCreated: number; nomineesCreated: number }> {
+  let categoriesCreated = 0;
+  let nomineesCreated = 0;
+
+  for (const item of items) {
+    // Create the category
+    const category = await createCategory(item.name);
+    categoriesCreated++;
+
+    // Add nominees
+    for (const nomineeName of item.nominees) {
+      await addNominee(category.id, nomineeName);
+      nomineesCreated++;
+    }
+  }
+
+  return { categoriesCreated, nomineesCreated };
+}

@@ -230,6 +230,20 @@ export const api = {
         throw new Error(error.error || 'Failed to clear winner');
       }
     },
+
+    bulkImport: async (categories: { name: string; nominees: string[] }[]): Promise<{ categoriesCreated: number; nomineesCreated: number }> => {
+      const res = await fetch(`${API_URL}/category/bulk-import`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ categories }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to import categories');
+      }
+      return res.json();
+    },
   },
 
   lobby: {
