@@ -61,6 +61,19 @@ interface ParticipantPick {
   isCorrect: boolean | null;
 }
 
+interface LeaderboardStats {
+  totalParticipants: number;
+  categoriesAnnounced: number;
+  totalCategories: number;
+}
+
+interface LeaderboardResponse {
+  entries: LeaderboardEntry[];
+  stats: LeaderboardStats;
+  lobbyName: string;
+  lobbyStatus: string;
+}
+
 // API Client
 
 export const api = {
@@ -361,8 +374,16 @@ export const api = {
     },
   },
 
-  // Leaderboard methods will be added in Phase 6
-  leaderboard: {},
+  leaderboard: {
+    get: async (lobbyId: string): Promise<LeaderboardResponse> => {
+      const res = await fetch(`${API_URL}/leaderboard/${lobbyId}`);
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to get leaderboard');
+      }
+      return res.json();
+    },
+  },
 };
 
 export type {
@@ -373,5 +394,7 @@ export type {
   Lobby,
   Participant,
   LeaderboardEntry,
+  LeaderboardStats,
+  LeaderboardResponse,
   ParticipantPick,
 };

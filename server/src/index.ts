@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.js';
 import categoryRoutes from './routes/category.js';
 import lobbyRoutes from './routes/lobby.js';
 import participantRoutes from './routes/participant.js';
+import leaderboardRoutes from './routes/leaderboard.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -74,6 +75,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/lobby', lobbyRoutes);
 app.use('/api/participant', participantRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
 
 // Health check endpoint
 app.get('/api/health', (_req, res) => {
