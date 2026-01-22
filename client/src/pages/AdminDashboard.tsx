@@ -195,6 +195,7 @@ function AdminDashboard() {
       </div>
 
       {/* Category Management Section */}
+      {admin?.username == 'admin' && (
       <div className="card">
         <h2>Category Management</h2>
         <p className="text-muted mb-2">Set up Oscar categories and nominees for prediction.</p>
@@ -202,6 +203,7 @@ function AdminDashboard() {
           Manage Categories
         </Link>
       </div>
+      )}
     </div>
   )
 }
