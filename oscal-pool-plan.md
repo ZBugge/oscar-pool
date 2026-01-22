@@ -10,8 +10,8 @@ Create a new "Oscar Pool" application for predicting Oscar winners, based on the
 
 | Phase | Status | Commit | Notes |
 |-------|--------|--------|-------|
-| 1. Project Setup | 🔄 | - | In progress |
-| 2. Database & Auth | ⬜ | - | |
+| 1. Project Setup | ✅ | 623d903 | Complete |
+| 2. Database & Auth | 🔄 | - | In progress |
 | 3. Category Management | ⬜ | - | |
 | 4. Lobby System | ⬜ | - | |
 | 5. Predictions | ⬜ | - | |
