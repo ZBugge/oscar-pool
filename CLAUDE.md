@@ -82,6 +82,8 @@ Session-based with `express-session`. Middleware checks `req.session.adminId`. F
 ### Deployment
 Railway with Nixpacks builder. Critical: Express static file middleware must come BEFORE any other middleware. Use `trust proxy` for secure cookies.
 
+test
+
 ### Environment Variables (Railway)
 ```bash
 NODE_ENV=production
