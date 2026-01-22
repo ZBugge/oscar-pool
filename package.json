@@ -1,0 +1,16 @@
+{
+  "name": "oscar-pool",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "build": "cd client && npm run build && cd ../server && npm run build",
+    "start": "npm run start --prefix server",
+    "postinstall": "npm install --prefix server && npm install --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
