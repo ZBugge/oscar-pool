@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { initializeDatabase } from './db/schema.js';
 import authRoutes from './routes/auth.js';
+import categoryRoutes from './routes/category.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -68,6 +69,7 @@ app.use(
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/category', categoryRoutes);
 
 // Health check endpoint
 app.get('/api/health', (_req, res) => {

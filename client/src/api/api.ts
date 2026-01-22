@@ -109,8 +109,115 @@ export const api = {
     },
   },
 
-  // Category methods will be added in Phase 3
-  category: {},
+  category: {
+    getAll: async (): Promise<CategoryWithNominees[]> => {
+      const res = await fetch(`${API_URL}/category`, {
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('Failed to get categories');
+      return res.json();
+    },
+
+    create: async (name: string): Promise<Category> => {
+      const res = await fetch(`${API_URL}/category`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to create category');
+      }
+      return res.json();
+    },
+
+    update: async (id: number, name: string, displayOrder?: number): Promise<Category> => {
+      const res = await fetch(`${API_URL}/category/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name, displayOrder }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to update category');
+      }
+      return res.json();
+    },
+
+    delete: async (id: number): Promise<void> => {
+      const res = await fetch(`${API_URL}/category/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to delete category');
+      }
+    },
+
+    reorder: async (orderedIds: number[]): Promise<CategoryWithNominees[]> => {
+      const res = await fetch(`${API_URL}/category/reorder`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ orderedIds }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to reorder categories');
+      }
+      return res.json();
+    },
+
+    addNominee: async (categoryId: number, name: string): Promise<Nominee> => {
+      const res = await fetch(`${API_URL}/category/${categoryId}/nominees`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to add nominee');
+      }
+      return res.json();
+    },
+
+    deleteNominee: async (categoryId: number, nomineeId: number): Promise<void> => {
+      const res = await fetch(`${API_URL}/category/${categoryId}/nominees/${nomineeId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to delete nominee');
+      }
+    },
+
+    setWinner: async (categoryId: number, nomineeId: number): Promise<void> => {
+      const res = await fetch(`${API_URL}/category/${categoryId}/nominees/${nomineeId}/winner`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to set winner');
+      }
+    },
+
+    clearWinner: async (categoryId: number): Promise<void> => {
+      const res = await fetch(`${API_URL}/category/${categoryId}/winner`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to clear winner');
+      }
+    },
+  },
 
   // Lobby methods will be added in Phase 4
   lobby: {},
