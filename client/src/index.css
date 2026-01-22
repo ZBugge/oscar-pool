@@ -8,6 +8,7 @@
 
 :root {
   /* Oscar Gold palette */
+  --gold: #d4af37;
   --gold-primary: #d4af37;
   --gold-light: #f4d03f;
   --gold-dark: #c5a028;
@@ -16,6 +17,7 @@
   --bg-dark: #1a1a1a;
   --bg-darker: #121212;
   --bg-card: #2d2d2d;
+  --bg-light: #f5f5f5;
 
   /* Text colors */
   --text-light: #fafafa;
@@ -24,9 +26,11 @@
   /* Card backgrounds */
   --card-bg: #fafafa;
   --card-border: #e0d9c8;
+  --border: #ddd;
 
   /* Status colors */
-  --success: #4caf50;
+  --success: #28a745;
+  --danger: #dc3545;
   --error: #f44336;
   --warning: #ff9800;
 }
@@ -116,6 +120,12 @@ a:hover {
 
 .btn-danger:hover {
   background: #d32f2f;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Cards */
