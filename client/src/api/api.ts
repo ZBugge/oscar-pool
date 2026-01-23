@@ -67,6 +67,29 @@ interface LeaderboardStats {
   totalCategories: number;
 }
 
+interface TopLobby {
+  id: string;
+  name: string;
+  participantCount: number;
+}
+
+interface TopAdmin {
+  id: number;
+  username: string;
+  lobbyCount: number;
+  totalParticipants: number;
+}
+
+interface SystemStats {
+  totals: {
+    admins: number;
+    lobbies: number;
+    participants: number;
+  };
+  topLobbies: TopLobby[];
+  topAdmins: TopAdmin[];
+}
+
 interface LeaderboardResponse {
   entries: LeaderboardEntry[];
   stats: LeaderboardStats;
@@ -398,6 +421,19 @@ export const api = {
       return res.json();
     },
   },
+
+  stats: {
+    get: async (): Promise<SystemStats> => {
+      const res = await fetch(`${API_URL}/stats`, {
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to get stats');
+      }
+      return res.json();
+    },
+  },
 };
 
 export type {
@@ -411,4 +447,5 @@ export type {
   LeaderboardStats,
   LeaderboardResponse,
   ParticipantPick,
+  SystemStats,
 };

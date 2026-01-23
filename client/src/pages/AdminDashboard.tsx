@@ -288,11 +288,22 @@ function AdminDashboard() {
 
       {/* Category Management Section */}
       {admin?.username == 'admin' && (
-      <div className="card">
+      <div className="card mb-3">
         <h2>Category Management</h2>
         <p className="text-muted mb-2">Set up Oscar categories and nominees for prediction.</p>
         <Link to="/admin/categories" className="btn btn-primary">
           Manage Categories
+        </Link>
+      </div>
+      )}
+
+      {/* System Stats Section */}
+      {admin?.username == 'admin' && (
+      <div className="card">
+        <h2>System Stats</h2>
+        <p className="text-muted mb-2">View system-wide statistics and activity.</p>
+        <Link to="/admin/stats" className="btn btn-primary">
+          View Stats
         </Link>
       </div>
       )}

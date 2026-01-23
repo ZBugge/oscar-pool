@@ -7,6 +7,7 @@ import CategoryManagement from './pages/CategoryManagement'
 import CreateLobby from './pages/CreateLobby'
 import JoinLobby from './pages/JoinLobby'
 import Leaderboard from './pages/Leaderboard'
+import StatsPage from './pages/StatsPage'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/categories" element={<CategoryManagement />} />
+        <Route path="/admin/stats" element={<StatsPage />} />
         <Route path="/admin/create-lobby" element={<CreateLobby />} />
         <Route path="/join/:lobbyId" element={<JoinLobby />} />
         <Route path="/leaderboard/:lobbyId" element={<Leaderboard />} />
