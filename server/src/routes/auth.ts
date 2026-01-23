@@ -26,9 +26,16 @@ router.post('/register', async (req, res) => {
 
     req.session.adminId = admin.id;
 
-    res.json({
-      id: admin.id,
-      username: admin.username,
+    // Explicitly save session before responding to prevent race conditions
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).json({ error: 'Session error' });
+      }
+      res.json({
+        id: admin.id,
+        username: admin.username,
+      });
     });
   } catch (error: any) {
     if (error.message?.includes('UNIQUE constraint failed')) {
@@ -55,9 +62,16 @@ router.post('/login', async (req, res) => {
 
     req.session.adminId = admin.id;
 
-    res.json({
-      id: admin.id,
-      username: admin.username,
+    // Explicitly save session before responding to prevent race conditions
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).json({ error: 'Session error' });
+      }
+      res.json({
+        id: admin.id,
+        username: admin.username,
+      });
     });
   } catch (error) {
     console.error('Login error:', error);
