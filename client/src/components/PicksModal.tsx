@@ -71,14 +71,21 @@ function PicksModal({ participantId, participantName, lobbyId, onClose }: PicksM
           onClick={onClose}
           style={{
             position: 'absolute',
-            top: '1rem',
-            right: '1rem',
-            background: 'none',
-            border: 'none',
-            fontSize: '1.5rem',
+            top: '0.75rem',
+            right: '0.75rem',
+            background: 'var(--bg-light)',
+            border: '1px solid var(--card-border)',
+            borderRadius: '50%',
+            width: '36px',
+            height: '36px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1.25rem',
             cursor: 'pointer',
-            color: 'var(--text-muted)',
+            color: 'var(--bg-dark)',
           }}
+          aria-label="Close"
         >
           ×
         </button>

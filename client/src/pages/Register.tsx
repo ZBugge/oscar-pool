@@ -38,7 +38,7 @@ function Register() {
 
   return (
     <div className="container">
-      <div style={{ maxWidth: '500px', margin: '4rem auto' }}>
+      <div style={{ maxWidth: '500px', margin: 'clamp(2rem, 8vw, 4rem) auto 0' }}>
         <h1>Admin Registration</h1>
 
         <div className="card">

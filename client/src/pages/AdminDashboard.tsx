@@ -92,11 +92,11 @@ function AdminDashboard() {
 
   return (
     <div className="container">
-      <div className="flex-between mb-3">
-        <h1>Admin Dashboard</h1>
-        <div className="flex gap-2">
-          <span style={{ color: 'var(--text-muted)' }}>Welcome, {admin?.username}</span>
-          <button onClick={handleLogout} className="btn btn-secondary">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+        <h1 style={{ margin: 0 }}>Admin Dashboard</h1>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Welcome, {admin?.username}</span>
+          <button onClick={handleLogout} className="btn btn-secondary" style={{ padding: '0.5rem 1rem' }}>
             Logout
           </button>
         </div>
@@ -116,46 +116,138 @@ function AdminDashboard() {
         {lobbies.length === 0 ? (
           <p className="text-muted">No lobbies yet. Create one to get started!</p>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Participants</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+          <>
+            {/* Desktop Table View */}
+            <div className="hide-mobile">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Participants</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lobbies.map((lobby) => (
+                    <tr key={lobby.id}>
+                      <td>{lobby.name}</td>
+                      <td>
+                        <span className={`badge badge-${lobby.status}`}>
+                          {lobby.status}
+                        </span>
+                      </td>
+                      <td>{lobby.participant_count ?? 0}</td>
+                      <td>
+                        <div className="flex gap-1" style={{ flexWrap: 'wrap' }}>
+                          <button
+                            className="btn btn-secondary"
+                            onClick={() => copyInviteLink(lobby.id)}
+                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                          >
+                            Copy Link
+                          </button>
+                          <Link
+                            to={`/leaderboard/${lobby.id}`}
+                            className="btn btn-secondary"
+                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                          >
+                            Leaderboard
+                          </Link>
+                          {lobby.status === 'open' && (
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => handleLock(lobby.id)}
+                              style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                            >
+                              Lock
+                            </button>
+                          )}
+                          {lobby.status === 'locked' && (
+                            <>
+                              <button
+                                className="btn btn-secondary"
+                                onClick={() => handleUnlock(lobby.id)}
+                                style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                              >
+                                Unlock
+                              </button>
+                              <button
+                                className="btn btn-primary"
+                                onClick={() => handleComplete(lobby.id)}
+                                style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                              >
+                                Complete
+                              </button>
+                            </>
+                          )}
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => handleDelete(lobby.id, lobby.name)}
+                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="show-mobile">
               {lobbies.map((lobby) => (
-                <tr key={lobby.id}>
-                  <td>{lobby.name}</td>
-                  <td>
+                <div
+                  key={lobby.id}
+                  style={{
+                    background: 'var(--bg-light)',
+                    borderRadius: '8px',
+                    padding: '1rem',
+                    marginBottom: '0.75rem',
+                    border: '1px solid var(--card-border)',
+                  }}
+                >
+                  {/* Lobby Header */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: '1rem', color: 'var(--bg-dark)' }}>
+                        {lobby.name}
+                      </div>
+                      <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                        {lobby.participant_count ?? 0} participants
+                      </div>
+                    </div>
                     <span className={`badge badge-${lobby.status}`}>
                       {lobby.status}
                     </span>
-                  </td>
-                  <td>{lobby.participant_count ?? 0}</td>
-                  <td>
-                    <div className="flex gap-1" style={{ flexWrap: 'wrap' }}>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button
                         className="btn btn-secondary"
                         onClick={() => copyInviteLink(lobby.id)}
-                        style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                        style={{ flex: 1, padding: '0.625rem', fontSize: '0.875rem' }}
                       >
                         Copy Link
                       </button>
                       <Link
                         to={`/leaderboard/${lobby.id}`}
                         className="btn btn-secondary"
-                        style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                        style={{ flex: 1, padding: '0.625rem', fontSize: '0.875rem', textAlign: 'center' }}
                       >
                         Leaderboard
                       </Link>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
                       {lobby.status === 'open' && (
                         <button
                           className="btn btn-primary"
                           onClick={() => handleLock(lobby.id)}
-                          style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                          style={{ flex: 1, padding: '0.625rem', fontSize: '0.875rem' }}
                         >
                           Lock
                         </button>
@@ -165,14 +257,14 @@ function AdminDashboard() {
                           <button
                             className="btn btn-secondary"
                             onClick={() => handleUnlock(lobby.id)}
-                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                            style={{ flex: 1, padding: '0.625rem', fontSize: '0.875rem' }}
                           >
                             Unlock
                           </button>
                           <button
                             className="btn btn-primary"
                             onClick={() => handleComplete(lobby.id)}
-                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                            style={{ flex: 1, padding: '0.625rem', fontSize: '0.875rem' }}
                           >
                             Complete
                           </button>
@@ -181,16 +273,16 @@ function AdminDashboard() {
                       <button
                         className="btn btn-danger"
                         onClick={() => handleDelete(lobby.id, lobby.name)}
-                        style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                        style={{ padding: '0.625rem', fontSize: '0.875rem' }}
                       >
                         Delete
                       </button>
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         )}
       </div>
 

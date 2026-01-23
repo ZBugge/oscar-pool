@@ -233,7 +233,12 @@ function JoinLobby() {
           ))}
 
           {/* Submit Button */}
-          <div className="card" style={{ position: 'sticky', bottom: '1rem', marginTop: '1rem' }}>
+          <div className="card" style={{
+            position: 'sticky',
+            bottom: '0.5rem',
+            marginTop: '1rem',
+            boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.15)',
+          }}>
             <button
               type="submit"
               className="btn btn-primary"
@@ -243,8 +248,8 @@ function JoinLobby() {
               {submitting ? 'Submitting...' : `Submit ${totalCategories} Predictions`}
             </button>
             {completedCount !== totalCategories && (
-              <p className="text-muted" style={{ textAlign: 'center', marginTop: '0.5rem', marginBottom: 0 }}>
-                Select a nominee for each category to submit
+              <p className="text-muted" style={{ textAlign: 'center', marginTop: '0.5rem', marginBottom: 0, fontSize: '0.875rem' }}>
+                {totalCategories - completedCount} more to go
               </p>
             )}
           </div>

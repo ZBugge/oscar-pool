@@ -80,9 +80,9 @@ function Leaderboard() {
     <div className="container">
       <div style={{ maxWidth: '900px', margin: '2rem auto' }}>
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           <h1 style={{ marginBottom: '0.5rem' }}>{lobbyName}</h1>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
             <span className={`badge badge-${lobbyStatus}`}>
               {lobbyStatus === 'open' ? 'Accepting Predictions' : lobbyStatus === 'locked' ? 'Locked' : 'Completed'}
             </span>
@@ -90,17 +90,17 @@ function Leaderboard() {
               <button
                 onClick={copyInviteLink}
                 className="btn btn-primary"
-                style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}
+                style={{ padding: '0.5rem 1rem' }}
               >
-                {copied ? '✓ Link Copied!' : 'Invite Friends'}
+                {copied ? '✓ Copied!' : 'Invite Friends'}
               </button>
             )}
-            {lastUpdated && (
-              <span className="text-muted" style={{ fontSize: '0.875rem' }}>
-                Last updated: {formatTime(lastUpdated)}
-              </span>
-            )}
           </div>
+          {lastUpdated && (
+            <p className="text-muted" style={{ fontSize: '0.875rem', marginTop: '0.5rem', marginBottom: 0 }}>
+              Last updated: {formatTime(lastUpdated)}
+            </p>
+          )}
         </div>
 
         {/* Stats Card */}
@@ -139,71 +139,149 @@ function Leaderboard() {
             )}
           </div>
         ) : (
-          <div className="card">
-            <table>
-              <thead>
-                <tr>
-                  <th style={{ width: '60px' }}>Rank</th>
-                  <th>Name</th>
-                  <th style={{ width: '100px', textAlign: 'center' }}>Score</th>
-                  {lobbyStatus !== 'open' && (
-                    <th style={{ width: '100px', textAlign: 'center' }}>Picks</th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {entries.map((entry, index) => (
-                  <tr key={entry.participantId}>
-                    <td>
-                      <span style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        background: entry.rank === 1 ? 'var(--gold)' :
-                                   entry.rank === 2 ? '#c0c0c0' :
-                                   entry.rank === 3 ? '#cd7f32' : 'var(--bg-light)',
-                        color: entry.rank <= 3 ? '#1a1a1a' : 'inherit',
-                        fontWeight: entry.rank <= 3 ? 700 : 400,
-                      }}>
-                        {entry.rank}
-                      </span>
-                    </td>
-                    <td style={{ fontWeight: index === 0 ? 600 : 400 }}>
+          <>
+            {/* Desktop Table View */}
+            <div className="card hide-mobile">
+              <table>
+                <thead>
+                  <tr>
+                    <th style={{ width: '60px' }}>Rank</th>
+                    <th>Name</th>
+                    <th style={{ width: '100px', textAlign: 'center' }}>Score</th>
+                    {lobbyStatus !== 'open' && (
+                      <th style={{ width: '100px', textAlign: 'center' }}>Picks</th>
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {entries.map((entry, index) => (
+                    <tr key={entry.participantId}>
+                      <td>
+                        <span style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '50%',
+                          background: entry.rank === 1 ? 'var(--gold)' :
+                                     entry.rank === 2 ? '#c0c0c0' :
+                                     entry.rank === 3 ? '#cd7f32' : 'var(--bg-light)',
+                          color: entry.rank <= 3 ? '#1a1a1a' : 'inherit',
+                          fontWeight: entry.rank <= 3 ? 700 : 400,
+                        }}>
+                          {entry.rank}
+                        </span>
+                      </td>
+                      <td style={{ fontWeight: index === 0 ? 600 : 400 }}>
+                        {entry.name}
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <span style={{
+                          fontSize: '1.125rem',
+                          fontWeight: 600,
+                          color: entry.score > 0 ? 'var(--gold)' : 'inherit',
+                        }}>
+                          {entry.score}
+                        </span>
+                        {stats && stats.categoriesAnnounced > 0 && (
+                          <span className="text-muted" style={{ fontSize: '0.75rem', marginLeft: '0.25rem' }}>
+                            /{stats.categoriesAnnounced}
+                          </span>
+                        )}
+                      </td>
+                      {lobbyStatus !== 'open' && (
+                        <td style={{ textAlign: 'center' }}>
+                          <button
+                            className="btn btn-secondary"
+                            onClick={() => setSelectedParticipant({ id: entry.participantId, name: entry.name })}
+                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                          >
+                            View
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="show-mobile">
+              {entries.map((entry, index) => (
+                <div
+                  key={entry.participantId}
+                  className="card"
+                  style={{
+                    marginBottom: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                    padding: '1rem',
+                  }}
+                >
+                  {/* Rank Badge */}
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    flexShrink: 0,
+                    background: entry.rank === 1 ? 'var(--gold)' :
+                               entry.rank === 2 ? '#c0c0c0' :
+                               entry.rank === 3 ? '#cd7f32' : 'var(--bg-light)',
+                    color: entry.rank <= 3 ? '#1a1a1a' : 'inherit',
+                    fontWeight: 700,
+                    fontSize: '1.125rem',
+                  }}>
+                    {entry.rank}
+                  </span>
+
+                  {/* Name and Score */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontWeight: index === 0 ? 600 : 500,
+                      fontSize: '1rem',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}>
                       {entry.name}
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
+                    </div>
+                    <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
                       <span style={{
-                        fontSize: '1.125rem',
                         fontWeight: 600,
-                        color: entry.score > 0 ? 'var(--gold)' : 'inherit',
+                        color: entry.score > 0 ? 'var(--gold-dark)' : 'inherit',
                       }}>
                         {entry.score}
                       </span>
                       {stats && stats.categoriesAnnounced > 0 && (
-                        <span className="text-muted" style={{ fontSize: '0.75rem', marginLeft: '0.25rem' }}>
-                          /{stats.categoriesAnnounced}
-                        </span>
+                        <span> / {stats.categoriesAnnounced} correct</span>
                       )}
-                    </td>
-                    {lobbyStatus !== 'open' && (
-                      <td style={{ textAlign: 'center' }}>
-                        <button
-                          className="btn btn-secondary"
-                          onClick={() => setSelectedParticipant({ id: entry.participantId, name: entry.name })}
-                          style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
-                        >
-                          View
-                        </button>
-                      </td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+
+                  {/* View Picks Button */}
+                  {lobbyStatus !== 'open' && (
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => setSelectedParticipant({ id: entry.participantId, name: entry.name })}
+                      style={{
+                        fontSize: '0.875rem',
+                        padding: '0.5rem 0.75rem',
+                        flexShrink: 0,
+                      }}
+                    >
+                      View
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
         )}
 
         {/* Auto-refresh indicator */}
